@@ -20,6 +20,9 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     Optional<Account> findByEmail(String email);
 
+    @Query("SELECT a FROM Account a WHERE a.email = :text OR a.username = :text")
+    Optional<Account> findByEmailOrUsername(@Param("text") String text);
+
     @Modifying
     @Query("UPDATE Account a SET a.enabled = TRUE where a.email = :email")
     void verifyAccount(@Param("email") String email);

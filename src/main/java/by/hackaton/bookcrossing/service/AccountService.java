@@ -6,6 +6,7 @@ import by.hackaton.bookcrossing.dto.request.NewPasswordRequest;
 import by.hackaton.bookcrossing.dto.response.AccountProfileResponse;
 import by.hackaton.bookcrossing.dto.response.AccountShortResponse;
 import by.hackaton.bookcrossing.entity.Account;
+import by.hackaton.bookcrossing.entity.Avatar;
 import by.hackaton.bookcrossing.repository.AccountRepository;
 import by.hackaton.bookcrossing.service.exceptions.BadRequestException;
 import java.io.IOException;
@@ -78,5 +79,12 @@ public class AccountService {
 
     public List<AccountShortResponse> getAllUsers() {
         return accountRepository.findAll().stream().map(a -> modelMapper.map(a, AccountShortResponse.class)).collect(toList());
+    }
+
+    public byte[] getUserAvatar(String identifier) {
+        Account account = accountRepository.findByEmailOrUsername(identifier).orElseThrow(
+                () -> new BadRequestException("Account not found"));
+        return account.getAvatar();
+
     }
 }
